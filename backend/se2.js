@@ -1,13 +1,20 @@
 require('dotenv').config();
 require('express-async-errors'); // Automatically catch async errors
 const express = require('express');
+const path = require('path')
+const { logger, logEvents } = require('./middleware/logger')
+const errorHandler = require('./middleware/errorHandler')
+const cookieParser = require('cookie-parser')
 const cors = require('cors');
-const connectDB = require('./config/db');
-const authRoutes = require('./routes/auth');
+const corsOptions = require('./config/corsOptions')
+const connectDB = require('./config/dbConn');
+const mongoose = require('mongoose')
+
+//                   const authRoutes = require('./routes/auth');
 
 // Initialize Express
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3500
 
 // Database Connection
 connectDB();
