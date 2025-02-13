@@ -1,6 +1,32 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 
+// Function to generate username based on role
+const generateUsername = async (role) => {
+  // Determine the prefix based on the role
+  let prefix;
+  switch (role) {
+    case "Admin":
+      prefix = "AD";
+      break;
+    case "Trainer":
+      prefix = "TR";
+      break;
+    case "Member":
+      prefix = "MB";
+      break;
+    default:
+      throw new Error("Invalid role");
+  }
+
+  // Find the count of users with the same role
+  const count = await User.countDocuments({ roles: role });
+
+  // Generate the username (e.g., AD001, TR002, MB003)
+  const username = `${prefix}${String(count + 1).padStart(3, "0")}`;
+  return username;
+};
+
 // @desc Get all users
 // @route GET /users
 // @access Private
@@ -12,7 +38,6 @@ const getAllUsers = async (req, res) => {
   if (!users?.length) {
     return res.status(400).json({ message: "No users found" });
   }
-
   res.json(users);
 };
 
@@ -20,30 +45,37 @@ const getAllUsers = async (req, res) => {
 // @route POST /users
 // @access Private
 const createNewUser = async (req, res) => {
-  const {
-    username,
-    firstName,
-    lastName,
-    email,
-    phoneNo,
-    password,
-    roles,
-    createdAt,
-  } = req.body;
+  const { firstName, lastName, email, phoneNo, password, roles } = req.body;
 
   // Confirm data
-  if (!username || !password) {
+  if (
+    !firstName ||
+    !lastName ||
+    !email ||
+    !phoneNo ||
+    !password ||
+    !roles?.length
+  ) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
-  // Check for duplicate username
-  const duplicate = await User.findOne({ username })
+  // Generate username based on role
+  const role = roles[0]; // Assuming roles is an array and the first role is the primary role
+  let username;
+  try {
+    username = await generateUsername(role);
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+
+  // Check for duplicate email or phone number
+  const duplicate = await User.findOne({ $or: [{ email }, { phoneNo }] })
     .collation({ locale: "en", strength: 2 })
     .lean()
     .exec();
 
   if (duplicate) {
-    return res.status(409).json({ message: "Duplicate username" });
+    return res.status(409).json({ message: "Duplicate email or phone number" });
   }
 
   // Hash password
@@ -60,7 +92,6 @@ const createNewUser = async (req, res) => {
           lastName,
           email,
           phoneNo,
-          createdAt,
         };
 
   try {
