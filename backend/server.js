@@ -15,7 +15,6 @@ connectDB(); // Database Connection
 const app = express(); // Initialize Express
 
 // Middleware
-console.log(process.env.NODE_ENV);
 app.use(logger); // Custom logger middleware for tracking requests
 app.use(cors(corsOptions)); // Enable CORS with options
 app.use(express.json()); // Middleware to parse JSON request bodies
@@ -26,6 +25,7 @@ app.use("/", express.static(path.join(__dirname, "public")));
 
 // Routes
 app.use("/", require("./routes/root"));
+app.use('/user', require('./routes/userRoutes'))
 
 // 404 Handler
 app.all("*", (req, res) => {
