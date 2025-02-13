@@ -25,6 +25,7 @@ app.use("/", express.static(path.join(__dirname, "public")));
 
 // Routes
 app.use("/", require("./routes/root"));
+app.use('/auth', require('./routes/authRoutes'))
 app.use('/user', require('./routes/userRoutes'))
 
 // 404 Handler
