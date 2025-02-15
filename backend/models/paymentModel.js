@@ -17,9 +17,14 @@ const paymentSchema = new mongoose.Schema({
   paymentDate: {
     type: Date,
     default: Date.now,
+    required: true,
   },
   paymentTime: {
     type: String,
+    default: function () {
+        const now = new Date();
+        return now.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: true });
+      },
     required: true,
   },
   amount: {
