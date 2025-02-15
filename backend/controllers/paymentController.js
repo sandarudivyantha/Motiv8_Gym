@@ -14,19 +14,26 @@ const createAdmissionPayment = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Create the admission payment
+    // Create the admission payment with user details
     const payment = await Payment.create({
       username: user.username,
       firstName: user.firstName,
       lastName: user.lastName,
+      paymentDate: new Date(),
       paymentTime: new Date().toLocaleTimeString(),
       amount,
+      status: "Active",
       paymentType: "Admission",
     });
 
     res.status(201).json({ message: "Admission payment created", payment });
   } catch (error) {
-    res.status(500).json({ message: "Failed to create admission payment", error: error.message });
+    res
+      .status(500)
+      .json({
+        message: "Failed to create admission payment",
+        error: error.message,
+      });
   }
 };
 
@@ -43,21 +50,28 @@ const createMonthlyPayment = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Create the monthly payment
+    // Create the monthly payment with user details
     const payment = await Payment.create({
       username: user.username,
       firstName: user.firstName,
       lastName: user.lastName,
+      paymentDate: new Date(),
       paymentTime: new Date().toLocaleTimeString(),
       amount,
       validFrom,
       validTo,
+      status: "Active",
       paymentType: "Monthly",
     });
 
     res.status(201).json({ message: "Monthly payment created", payment });
   } catch (error) {
-    res.status(500).json({ message: "Failed to create monthly payment", error: error.message });
+    res
+      .status(500)
+      .json({
+        message: "Failed to create monthly payment",
+        error: error.message,
+      });
   }
 };
 
@@ -69,7 +83,9 @@ const getAllPayments = async (req, res) => {
     const payments = await Payment.find().lean();
     res.json(payments);
   } catch (error) {
-    res.status(500).json({ message: "Failed to fetch payments", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Failed to fetch payments", error: error.message });
   }
 };
 
@@ -78,4 +94,3 @@ module.exports = {
   createMonthlyPayment,
   getAllPayments,
 };
-
