@@ -78,3 +78,4 @@ module.exports = {
   createMonthlyPayment,
   getAllPayments,
 };
+
