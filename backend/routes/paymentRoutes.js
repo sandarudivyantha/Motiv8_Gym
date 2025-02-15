@@ -10,6 +10,10 @@ router.use(verifyJWT);
 router.use(verifyRoles("Admin", "Trainer"));
 
 router
+  .route("/")
+  .get(paymentController.getAllPayments);
+
+router
   .route("/admission")
   .post(paymentController.createAdmissionPayment);
 
@@ -18,7 +22,9 @@ router
   .post(paymentController.createMonthlyPayment);
 
 router
-  .route("/")
-  .get(paymentController.getAllPayments);
+  .route("/:id")
+  .get(paymentController.getPaymentById)
+  .patch(paymentController.updatePayment)
+  .delete(paymentController.deletePayment);
 
 module.exports = router;
