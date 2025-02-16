@@ -52,24 +52,25 @@ const paymentSchema = new mongoose.Schema({
 
 // Generate a unique bill code before saving
 paymentSchema.pre("validate", async function (next) {
-    if (!this.billCode) {
-      let isUnique = false;
-      let newBillCode = "";
-  
-      while (!isUnique) {
-        const count = await mongoose.models.Payment.countDocuments();
-        newBillCode = `BILL${String(count + 1).padStart(6, "0")}`;
-  
-        // Check if the billCode already exists
-        const existingBill = await mongoose.models.Payment.findOne({ billCode: newBillCode });
-        if (!existingBill) {
-          isUnique = true;
-        }
+  if (!this.billCode) {
+    let isUnique = false;
+    let newBillCode = "";
+
+    while (!isUnique) {
+      const count = await mongoose.models.Payment.countDocuments();
+      newBillCode = `BILL${String(count + 1).padStart(6, "0")}`;
+
+      // Check if the billCode already exists
+      const existingBill = await mongoose.models.Payment.findOne({
+        billCode: newBillCode,
+      });
+      if (!existingBill) {
+        isUnique = true;
       }
-      this.billCode = newBillCode;
     }
-    next();
-  });
-  
+    this.billCode = newBillCode;
+  }
+  next();
+});
 
 module.exports = mongoose.model("Payment", paymentSchema);
