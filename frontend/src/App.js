@@ -1,9 +1,9 @@
 import { Routes, Route } from "react-router-dom";
 // import DashboardHeader from "./components/Public/DashboardHeader";
-import Layout from './components/Layout'
-import Public from './components/Public'
+// import Layout from './components/Layout'
+import Public from './components/public'
 import Login from './features/auth/Login'
-import DashLayout from './components/DashLayout'
+import DashLayout from './components/public/DashLayout'
 import Welcome from './features/auth/Welcome'
 import PaymentsList from './features/payments/PaymentsList'
 import UsersList from './features/users/UsersList'
@@ -20,7 +20,8 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/" element={<Layout />}>
+      {/* <Route path="/" element={<Layout />}> */}
+      <Route path="/" element={<DashLayout />}>
         <Route index element={<Public />} />
         <Route path="login" element={<Login />} />
 
