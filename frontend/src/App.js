@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 // import DashboardHeader from "./components/Public/DashboardHeader";
 // import Layout from './components/Layout'
-import Public from './components/public'
+import Public from './components/public/Public'
 import Login from './features/auth/Login'
 import DashLayout from './components/public/DashLayout'
 import Welcome from './features/auth/Welcome'
@@ -12,6 +12,8 @@ import EditUser from './features/users/EditUser'
 import Prefetch from './features/auth/Prefetch'
 import PersistLogin from './features/auth/PersistLogin'
 import RequireAuth from './features/auth/RequireAuth'
+import NewPayment from './features/payments/NewPayment';
+import EditPayment from './features/payments/EditPayment';
 import { ROLES } from './config/roles'
 import useTitle from './hooks/useTitle'
 
