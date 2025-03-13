@@ -1,2 +1,13 @@
 @import "tailwindcss";
 
+body {
+  @apply bg-gray-100;
+}
+
+.dash-container {
+  @apply p-4;
+}
+
+.form-input {
+  @apply w-full p-2 border rounded;
+}
