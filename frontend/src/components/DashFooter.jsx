@@ -1,5 +1,6 @@
 // src/components/DashFooter.jsx
-import { useAuth } from '../hooks/useAuth'
+// import { useAuth } from '../hooks/useAuth'
+import useAuth from '../hooks/useAuth';
 
 const DashFooter = () => {
   const { username, isAdmin, isTrainer } = useAuth()
